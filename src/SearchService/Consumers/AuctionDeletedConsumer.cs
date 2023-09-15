@@ -8,13 +8,13 @@ namespace SearchService.Consumers;
 
 public class AuctionDeletedConsumer : IConsumer<AuctionDeleted>
 {
-    
     public async Task Consume(ConsumeContext<AuctionDeleted> context)
     {
         Console.WriteLine($"->> Consuming AuctionUpdated: {context.Message.Id}");
 
-        var item = await DB.Find<Item>().OneAsync(context.Message.Id);
-        
-        await item.DeleteAsync();
+        var result = await DB.DeleteAsync<Item>(context.Message.Id);
+
+        if (!result.IsAcknowledged)
+            throw new MessageException(typeof(AuctionDeleted), "Problem deleting auction from mongoDB");
     }
 }

@@ -20,10 +20,21 @@ public class AuctionUpdatedConsumer : IConsumer<AuctionUpdated>
     {
         Console.WriteLine($"->> Consuming AuctionUpdated: {context.Message.Id}");
 
-        var item = await DB.Find<Item>().OneAsync(context.Message.Id);
+        var item = _mapper.Map<Item>(context.Message);
 
-        _mapper.Map(context.Message, item);
-        
-        await item.SaveAsync();
+        var result = await DB.Update<Item>()
+            .Match(x => x.ID == context.Message.Id)
+            .ModifyOnly(x => new
+            {
+                x.Color,
+                x.Make,
+                x.Model,
+                x.Year,
+                x.Mileage
+            }, item)
+            .ExecuteAsync();
+
+        if (!result.IsAcknowledged)
+            throw new MessageException(typeof(AuctionUpdated),"Problem updating mongoDB");
     }
 }

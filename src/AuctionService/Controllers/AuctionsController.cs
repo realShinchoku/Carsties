@@ -74,9 +74,7 @@ public class AuctionsController : ControllerBase
         auction.Item.Color = updateAuctionDto.Color ?? auction.Item.Color;
         auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
 
-        var newAuction = _mapper.Map<AuctionDto>(auction);
-
-        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(newAuction));
+        await _publishEndpoint.Publish(_mapper.Map<AuctionUpdated>(auction));
 
         var result = await _context.SaveChangesAsync() > 0;
 
@@ -93,7 +91,7 @@ public class AuctionsController : ControllerBase
 
         _context.Remove(auction);
 
-        await _publishEndpoint.Publish(new AuctionDeleted { Id = id.ToString() });
+        await _publishEndpoint.Publish<AuctionDeleted>(new { Id = id.ToString() });
 
         var result = await _context.SaveChangesAsync() > 0;
 
