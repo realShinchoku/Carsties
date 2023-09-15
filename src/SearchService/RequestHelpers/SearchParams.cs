@@ -1,4 +1,4 @@
-namespace SearchService.RequestHeplers;
+namespace SearchService.RequestHelpers;
 
 public class SearchParams
 {
