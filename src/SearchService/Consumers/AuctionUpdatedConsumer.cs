@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.ComTypes;
 using AutoMapper;
 using Contracts;
 using MassTransit;
@@ -35,6 +34,6 @@ public class AuctionUpdatedConsumer : IConsumer<AuctionUpdated>
             .ExecuteAsync();
 
         if (!result.IsAcknowledged)
-            throw new MessageException(typeof(AuctionUpdated),"Problem updating mongoDB");
+            throw new MessageException(typeof(AuctionUpdated), "Problem updating mongoDB");
     }
 }
