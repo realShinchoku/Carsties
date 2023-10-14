@@ -30,7 +30,7 @@
                             <label asp-for="Input.Password"></label>
                             <input type="password" class="form-control" placeholder="Password" asp-for="Input.Password" autocomplete="off">
                         </div>
-                        
+
                         <a class="p-2 d-block" asp-page="/Account/Login/Index" asp-route-returnUrl="@Model.Input.ReturnUrl">
                             Already registered? Login Here
                         </a>
@@ -39,7 +39,7 @@
                         <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
                     </form>
                 </div>
-                
+
                 @if (Model.RegisterSuccess)
                 {
                     <div class="alert alert-success mt-2">

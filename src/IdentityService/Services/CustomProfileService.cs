@@ -19,12 +19,12 @@ public class CustomProfileService : IProfileService
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var user = await _userManager.GetUserAsync(context.Subject);
-        
+
         var existingClaims = await _userManager.GetClaimsAsync(user);
 
-        var claims = new List<Claim>()
+        var claims = new List<Claim>
         {
-            new("username", user.UserName),
+            new("username", user.UserName)
         };
 
         context.IssuedClaims.AddRange(claims);

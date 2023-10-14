@@ -52,7 +52,7 @@ public class AuctionsController : ControllerBase
         var auction = _mapper.Map<Auction>(createAuctionDto);
 
         auction.Seller = User.Identity?.Name;
-        
+
         _context.Auctions.Add(auction);
 
         var newAuction = _mapper.Map<AuctionDto>(auction);
@@ -72,7 +72,7 @@ public class AuctionsController : ControllerBase
     {
         var auction = await _context.Auctions.Include(x => x.Item).FirstOrDefaultAsync(x => x.Id == id);
         if (auction == null) return NotFound();
-        
+
         if (auction.Seller != User.Identity?.Name) return Forbid();
 
         auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
@@ -96,7 +96,7 @@ public class AuctionsController : ControllerBase
     {
         var auction = await _context.Auctions.FirstOrDefaultAsync(x => x.Id == id);
         if (auction == null) return NotFound();
-        
+
         if (auction.Seller != User.Identity?.Name) return Forbid();
 
         _context.Remove(auction);

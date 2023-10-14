@@ -69,10 +69,12 @@ public class Index : PageModel
             await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
 
             // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
-            return context.IsNativeClient() ?
+            return context.IsNativeClient()
+                ?
                 // The client is native, so this change in how to
                 // return the response is for better UX for the end user.
-                this.LoadingPage(Input.ReturnUrl) : Redirect(Input.ReturnUrl);
+                this.LoadingPage(Input.ReturnUrl)
+                : Redirect(Input.ReturnUrl);
 
             // since we don't have a valid context, then we just go back to the home page
         }
@@ -88,14 +90,14 @@ public class Index : PageModel
                     clientId: context?.Client.ClientId));
 
                 if (context != null)
-                {
-                    return context.IsNativeClient() ?
+                    return context.IsNativeClient()
+                        ?
                         // The client is native, so this change in how to
                         // return the response is for better UX for the end user.
-                        this.LoadingPage(Input.ReturnUrl) :
+                        this.LoadingPage(Input.ReturnUrl)
+                        :
                         // we can trust model.ReturnUrl since GetAuthorizationContextAsync returned non-null
                         Redirect(Input.ReturnUrl);
-                }
 
                 // request for a local page
                 if (Url.IsLocalUrl(Input.ReturnUrl))

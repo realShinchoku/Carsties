@@ -17,7 +17,7 @@ public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
     public async Task Consume(ConsumeContext<AuctionFinished> context)
     {
         Console.WriteLine("--> Consuming AuctionFinished");
-        
+
         var auction = await _context.Auctions.FindAsync(context.Message.AuctionId);
 
         if (auction == null) return;

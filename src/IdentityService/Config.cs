@@ -14,7 +14,7 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new("auctionApp", "Auction app full access"),
+            new("auctionApp", "Auction app full access")
         };
 
     public static IEnumerable<Client> Clients =>
@@ -27,19 +27,19 @@ public static class Config
                 AllowedScopes = { "openid", "profile", "auctionApp" },
                 RedirectUris = { "https://www.getpostman.com/oauth2/callback" },
                 ClientSecrets = new Secret[] { new("NotASecret".Sha256()) },
-                AllowedGrantTypes = { GrantType.ResourceOwnerPassword },
+                AllowedGrantTypes = { GrantType.ResourceOwnerPassword }
             },
             new()
             {
                 ClientId = "nextApp",
                 ClientName = "nextApp",
-                ClientSecrets = {new Secret("secret".Sha256())},
+                ClientSecrets = { new Secret("secret".Sha256()) },
                 AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                 RequirePkce = false,
-                RedirectUris = {"http://localhost:3000/api/auth/callback/id-server"},
+                RedirectUris = { "http://localhost:3000/api/auth/callback/id-server" },
                 AllowOfflineAccess = true,
-                AllowedScopes = {"openid", "profile", "auctionApp"},
-                AccessTokenLifetime = 3600*24*30,
+                AllowedScopes = { "openid", "profile", "auctionApp" },
+                AccessTokenLifetime = 3600 * 24 * 30
             }
         };
 }
