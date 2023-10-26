@@ -11,16 +11,17 @@ COPY src/IdentityService/IdentityService.csproj src/IdentityService/IdentityServ
 COPY src/BiddingService/BiddingService.csproj src/BiddingService/BiddingService.csproj
 COPY src/NotificationService/NotificationService.csproj src/NotificationService/NotificationService.csproj
 
-
 RUN dotnet restore Carsties.sln
 
 
-COPY src/GatewayService src/GatewayService
+COPY src/NotificationService src/NotificationService
+COPY src/Contracts src/Contracts
 
-WORKDIR /app/src/GatewayService
+WORKDIR /app/src/NotificationService
 RUN dotnet publish -c Release -o /app/src/out
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 COPY --from=build /app/src/out .
-ENTRYPOINT ["dotnet", "GatewayService.dll"]
+ENTRYPOINT ["dotnet", "NotificationService.dll"]
+

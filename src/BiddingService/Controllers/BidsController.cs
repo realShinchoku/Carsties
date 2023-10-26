@@ -14,9 +14,9 @@ namespace BiddingService.Controllers;
 [Route("api/[controller]")]
 public class BidsController : ControllerBase
 {
+    private readonly GrpcAuctionClient _grpcClient;
     private readonly IMapper _mapper;
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly GrpcAuctionClient _grpcClient;
 
     public BidsController(IMapper mapper, IPublishEndpoint publishEndpoint, GrpcAuctionClient grpcClient)
     {
@@ -24,7 +24,7 @@ public class BidsController : ControllerBase
         _publishEndpoint = publishEndpoint;
         _grpcClient = grpcClient;
     }
-    
+
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<Bid>> PlaceBid(string auctionId, int amount)
@@ -34,23 +34,25 @@ public class BidsController : ControllerBase
         if (auction == null)
         {
             auction = _grpcClient.GetAuction(auctionId);
-            
+
             if (auction == null) return BadRequest("Cannot access bids on this auction at this time");
         }
 
         if (auction.Seller == User.Identity.Name)
             return BadRequest("You cannot bid on your own auction");
 
-        var bid = new Bid()
+        var bid = new Bid
         {
             Amount = amount,
             AuctionId = auctionId,
-            Bidder = User.Identity.Name,
+            Bidder = User.Identity.Name
         };
 
         if (auction.AuctionEnd < DateTime.UtcNow)
+        {
             bid.BidStatus = BidStatus.Finished;
-        
+        }
+
         else
         {
             var highBid = await DB.Find<Bid>()
@@ -58,7 +60,7 @@ public class BidsController : ControllerBase
                 .Sort(b => b.Descending(x => x.Amount))
                 .ExecuteFirstAsync();
 
-            if (highBid != null && amount > highBid.Amount || highBid == null)
+            if ((highBid != null && amount > highBid.Amount) || highBid == null)
                 bid.BidStatus = amount > auction.ReservePrice
                     ? BidStatus.Accepted
                     : BidStatus.AcceptedBelowReserve;
@@ -73,7 +75,7 @@ public class BidsController : ControllerBase
 
         return Ok(_mapper.Map<BidDto>(bid));
     }
-    
+
     [HttpGet("{auctionId}")]
     public async Task<ActionResult<List<Bid>>> GetBidsForAuction(string auctionId)
     {

@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddMassTransit(opts =>
 {
     opts.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
-    
+
     opts.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("bids", false));
 
     opts.UsingRabbitMq((context, cfg) =>
@@ -51,6 +51,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await DB.InitAsync("BidDB", MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
+await DB.InitAsync("BidDB",
+    MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
 
 app.Run();

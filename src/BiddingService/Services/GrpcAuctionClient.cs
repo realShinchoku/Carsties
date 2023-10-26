@@ -6,21 +6,21 @@ namespace BiddingService.Services;
 
 public class GrpcAuctionClient
 {
-    private readonly ILogger<GrpcAuctionClient> _logger;
     private readonly IConfiguration _config;
+    private readonly ILogger<GrpcAuctionClient> _logger;
 
     public GrpcAuctionClient(ILogger<GrpcAuctionClient> logger, IConfiguration config)
     {
         _logger = logger;
         _config = config;
     }
-    
+
     public Auction GetAuction(string id)
     {
         _logger.LogInformation("Calling GRPC Service");
         var channel = GrpcChannel.ForAddress(_config["GrpcAuction"]);
         var client = new GrpcAuction.GrpcAuctionClient(channel);
-        var request = new GetAuctionRequest{Id = id};
+        var request = new GetAuctionRequest { Id = id };
 
         try
         {
@@ -30,9 +30,9 @@ public class GrpcAuctionClient
                 ID = reply.Auction.Id,
                 AuctionEnd = DateTime.Parse(reply.Auction.AuctionEnd),
                 Seller = reply.Auction.Seller,
-                ReservePrice = reply.Auction.ReservePrice,
+                ReservePrice = reply.Auction.ReservePrice
             };
-            
+
             return auction;
         }
         catch (Exception e)

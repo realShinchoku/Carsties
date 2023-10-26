@@ -16,9 +16,10 @@ public class GrpcAuctionService : GrpcAuction.GrpcAuctionBase
     public override async Task<GrpcAuctionResponse> GetAuction(GetAuctionRequest request, ServerCallContext context)
     {
         Console.WriteLine("==> Received Grpc request for auction");
-        
+
         var auction = await _dbContext.Auctions.FindAsync(Guid.Parse(request.Id))
-            ?? throw new RpcException(new Status(StatusCode.NotFound, $"Auction with id {request.Id} not found"));
+                      ?? throw new RpcException(new Status(StatusCode.NotFound,
+                          $"Auction with id {request.Id} not found"));
 
         var response = new GrpcAuctionResponse
         {
@@ -27,10 +28,10 @@ public class GrpcAuctionService : GrpcAuction.GrpcAuctionBase
                 Id = auction.Id.ToString(),
                 Seller = auction.Seller,
                 AuctionEnd = auction.AuctionEnd.ToString(CultureInfo.InvariantCulture),
-                ReservePrice = auction.ReservePrice,
+                ReservePrice = auction.ReservePrice
             }
         };
-        
+
         return response;
     }
 }
