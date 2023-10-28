@@ -1,6 +1,6 @@
 'use server'
 
-import {Auction, PagedResult} from "@/types";
+import {Auction, Bid, PagedResult} from "@/types";
 import {fetchWrapper} from "@/lib/fetchWrapper";
 import {FieldValues} from "react-hook-form";
 import {revalidatePath} from "next/cache";
@@ -26,3 +26,7 @@ export const updateAuction = async (id: string, data: FieldValues) => {
 };
 
 export const deleteAuction = async (id: string) => await fetchWrapper.del(`auctions/${id}`);
+
+export const getBidsForAuction = async (id: string): Promise<Bid[]> => await fetchWrapper.get(`bids/${id}`);
+
+export const placeBidForAuction = async (auctionId: string, amount: number): Promise<Bid> => await fetchWrapper.post(`bids?auctionId=${auctionId}&amount=${amount}`, {});

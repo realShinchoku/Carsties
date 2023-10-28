@@ -26,7 +26,7 @@ export default function Search() {
                 value={searchValue}
                 type="text"
                 placeholder={'Search for a car by make, model or color'}
-                className={'flex-grow pl-5 bg-transparent focus:outline-none border-transparent focus:border-transparent focus:ring-0 text-sm text-gray-600'}
+                className={'input-custom text-sm text-gray-600'}
                 onChange={onChange}
                 onKeyDown={e => {
                     if (e.key === 'Enter') search();
