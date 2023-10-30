@@ -1,15 +1,15 @@
 'use client'
 
-import AuctionCard from "@/app/auctions/AuctionCard";
 import AppPagination from "@/app/components/AppPagination";
 import {useEffect, useState} from "react";
-import Filters from "@/app/auctions/Filters";
 import {useParamsStore} from "@/hooks/useParamsStore";
 import {shallow} from "zustand/shallow";
 import qs from "query-string";
 import EmptyFilter from "@/app/components/EmptyFilter";
 import {getData} from "@/app/actions/auctionActions";
 import {useAuctionStore} from "@/hooks/useAuctionStore";
+import Filters from "@/app/auctions/Filters";
+import AuctionCard from "@/app/auctions/AuctionCard";
 
 export default function Listings() {
     const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ export default function Listings() {
                 setData(data);
                 setLoading(false);
             });
-    }, [url]);
+    }, [url, setData]);
 
     if (loading) return <h3>Loading...</h3>
 

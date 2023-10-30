@@ -1,12 +1,13 @@
 import {getDetailedViewData} from "@/app/actions/auctionActions";
 import Heading from "@/app/components/Heading";
-import CarImage from "@/app/auctions/CarImage";
-import CountdownTimer from "@/app/auctions/CountdownTimer";
-import DetailedSpecs from "@/app/auctions/details/[id]/DetailedSpecs";
 import {getCurrentUser} from "@/app/actions/authActions";
 import EditButton from "@/app/auctions/details/[id]/EditButton";
 import DeleteButton from "@/app/auctions/details/[id]/DeleteButton";
+import CountdownTimer from "@/app/auctions/CountdownTimer";
+import CarImage from "@/app/auctions/CarImage";
 import BidList from "@/app/auctions/details/[id]/BidList";
+import DetailedSpecs from "@/app/auctions/details/[id]/DetailedSpecs";
+
 
 export default async function Details({params}: { params: { id: string } }) {
     const data = await getDetailedViewData(params.id);

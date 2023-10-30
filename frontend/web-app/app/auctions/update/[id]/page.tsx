@@ -1,6 +1,6 @@
 import Heading from "@/app/components/Heading";
-import AuctionForm from "@/app/auctions/AuctionForm";
 import {getDetailedViewData} from "@/app/actions/auctionActions";
+import AuctionForm from "@/app/auctions/AuctionForm";
 
 export default async function Update({params}: { params: { id: string } }) {
     const data = await getDetailedViewData(params.id);

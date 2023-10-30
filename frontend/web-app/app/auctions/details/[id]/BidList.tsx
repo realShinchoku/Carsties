@@ -7,9 +7,9 @@ import {useBidStore} from "@/hooks/useBidStore";
 import {useEffect, useState} from "react";
 import toast from "react-hot-toast";
 import Heading from "@/app/components/Heading";
-import BidItem from "@/app/auctions/details/[id]/BidItem";
 import {numberWithCommas} from "@/app/lib/numberWithComma";
 import EmptyFilter from "@/app/components/EmptyFilter";
+import BidItem from "@/app/auctions/details/[id]/BidItem";
 import BidForm from "@/app/auctions/details/[id]/BidForm";
 
 type  Props = {

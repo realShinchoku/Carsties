@@ -32,7 +32,7 @@ export default function CountdownTimer({auctionEnd}: Props) {
     const pathname = usePathname();
 
     function auctionFinished() {
-        if (pathname.startsWith('/auctions/details')) {
+        if (pathname?.startsWith('/auctions/details')) {
             setOpen(false);
         }
     }
