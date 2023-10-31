@@ -1,3 +1,4 @@
+using System;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,12 @@ builder.Services.AddMassTransit(opts =>
 
     opts.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseMessageRetry(r =>
+        {
+            r.Handle<RabbitMqConnectionException>();
+            r.Interval(5, TimeSpan.FromSeconds(10));
+        });
+        
         cfg.Host(builder.Configuration["RabbitMQ:Host"], "/", host =>
         {
             host.Username(builder.Configuration.GetValue("RabbitMQ:Username", "guest"));
