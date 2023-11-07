@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  labels:
+    app: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      name: webapp
+      labels:
+        app: webapp
+    spec:
+      containers:
+        - name: webapp
+          image: realshinchoku/carsties-web-app
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: webapp-secret
+                  key: authSecret
+            - name: NEXTAUTH_URL
+              value: https://api.carsties.com
+            - name: API_URL
+              value: http://gateway-clusterip/
+            - name: ID_URL
+              value: https://id.carsties.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-clusterip
+spec:
+    type: ClusterIP
+    selector:
+        app: webapp
+    ports:
+        - port: 3000
+          targetPort: 3000

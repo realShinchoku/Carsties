@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bid-svc
+  labels:
+    app: bid-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bid-svc
+  template:
+    metadata:
+      name: bid-svc
+      labels:
+        app: bid-svc
+    spec:
+      containers:
+        - name: bid-svc
+          image: realshinchoku/carsties-bid-svc
+          env:
+            - name: RabbitMQ__Host
+              value: rabbit-clusterip
+            - name: RabbitMQ__Username
+              valueFrom:
+                secretKeyRef:
+                  name: bid-secret
+                  key: rabbitUn
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: bid-secret
+                  key: rabbitPw
+            - name: ConnectionStrings__BidDbConnection
+              valueFrom:
+                secretKeyRef:
+                  name: bid-secret
+                  key: connString
+            - name: IdentityServiceUrl
+              value: https://id.carsties.com
+            - name: GrpcAuction
+              value: http://auction-clusterip:7777
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bid-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: bid-svc
+  ports:
+    - port: 80
+      targetPort: 80

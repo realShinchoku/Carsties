@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-svc
+  labels:
+    app: identity-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identity-svc
+  template:
+    metadata:
+      name: identity-svc
+      labels:
+        app: identity-svc
+    spec:
+      containers:
+        - name: identity-svc
+          image: realshinchoku/carsties-identity-svc
+          env:
+            - name: RabbitMQ__Host
+              value: rabbit-clusterip
+            - name: RabbitMQ__Username
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secret
+                  key: rabbitUn
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secret
+                  key: rabbitPw
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: identity-secret
+                  key: connString
+            - name: ClientApp
+              value: https://app.carsties.com
+            - name: VIRTUAL_HOST
+              value: id.carsties.com
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: identity-svc
+  ports:
+    - port: 80
+      targetPort: 80

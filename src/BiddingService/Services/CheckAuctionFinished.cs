@@ -1,6 +1,7 @@
 using BiddingService.Models;
 using Contracts;
 using MassTransit;
+using MongoDB.Driver;
 using MongoDB.Entities;
 
 namespace BiddingService.Services;
@@ -9,11 +10,13 @@ public class CheckAuctionFinished : BackgroundService
 {
     private readonly ILogger<CheckAuctionFinished> _logger;
     private readonly IServiceProvider _services;
+    private readonly IConfiguration _config;
 
-    public CheckAuctionFinished(ILogger<CheckAuctionFinished> logger, IServiceProvider services)
+    public CheckAuctionFinished(ILogger<CheckAuctionFinished> logger, IServiceProvider services, IConfiguration config)
     {
         _logger = logger;
         _services = services;
+        _config = config;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -32,6 +35,13 @@ public class CheckAuctionFinished : BackgroundService
 
     private async Task CheckAuctions(CancellationToken stoppingToken)
     {
+        var db = await DB.AllDatabaseNamesAsync(MongoClientSettings.FromConnectionString(_config.GetConnectionString("BidDbConnection")));
+        if (!db.Contains("BidDB")) return;
+        var dbInit = await DB.Database("BidDB").IsAccessibleAsync();
+        if (!dbInit) return;
+        var dbExists = await DB.Database("BidDB").ExistsAsync();
+        if(!dbExists) return;
+
         var finishedAuctions = await DB.Find<Auction>()
             .Match(x => x.AuctionEnd <= DateTime.UtcNow)
             .Match(x => !x.Finished)

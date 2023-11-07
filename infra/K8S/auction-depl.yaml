@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auction-svc
+  labels:
+    app: auction-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auction-svc
+  template:
+    metadata:
+      name: auction-svc
+      labels:
+        app: auction-svc
+    spec:
+      containers:
+        - name: auction-svc
+          image: realshinchoku/carsties-auction-svc
+          env:
+            - name: RabbitMQ__Host
+              value: rabbit-clusterip
+            - name: RabbitMQ__Username
+              valueFrom:
+                secretKeyRef:
+                  name: auction-secret
+                  key: rabbitUn
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: auction-secret
+                  key: rabbitPw
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: auction-secret
+                  key: connString
+            - name: IdentityServiceUrl
+              value: https://id.carsties.com
+            - name: Kestrel__Endpoints__WebApi__Url
+              value: http://+:80
+            - name: Kestrel__Endpoints__Grpc__Protocols
+              value: Http2
+            - name: Kestrel__Endpoints__Grpc__Url
+              value: http://+:7777
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auction-clusterip
+spec:
+  type: ClusterIP
+  selector:
+    app: auction-svc
+  ports:
+    - port: 80
+      targetPort: 80
+      name: web
+    - port: 7777
+      targetPort: 7777
+      name: grpc

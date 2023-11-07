@@ -1,11 +1,11 @@
-name: deploy-identity
+name: deploy-web-app
 
 on:
   workflow_dispatch:
   push:
     branches: [ "main" ]
     paths:
-      - 'src/IdentityService/**'
+      - 'src/frontend/web-app/**'
 
 jobs: 
   build:
@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: "{{defaultContext}}"
-          file: ./src/IdentityService/Dockerfile
+          file: ./src/frontend/web-app/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/carsties-identity-svc:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/carsties-web-app:latest

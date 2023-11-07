@@ -61,7 +61,8 @@ app.MapControllers();
 await Policy.Handle<TimeoutException>()
     .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))
     .ExecuteAndCaptureAsync(async () =>
-        await DB.InitAsync("BidDB", MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection"))));
+        await DB.InitAsync("BidDB",
+            MongoClientSettings.FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection"))));
 
 
 app.Run();
