@@ -30,6 +30,4 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-Console.WriteLine($"Gateway service is running on {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
-
 app.Run();
