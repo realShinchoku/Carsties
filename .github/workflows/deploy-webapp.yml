@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'src/frontend/web-app/**'
+      - 'frontend/web-app/**'
 
 jobs: 
   build:
@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: "{{defaultContext}}"
-          file: ./src/frontend/web-app/Dockerfile
+          file: ./frontend/web-app/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/carsties-web-app:latest
