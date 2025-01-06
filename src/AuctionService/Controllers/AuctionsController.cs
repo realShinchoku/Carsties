@@ -27,6 +27,11 @@ public class AuctionsController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Retrieves a list of all auctions.
+    /// </summary>
+    /// <param name="date">Optional date filter to retrieve auctions updated after the specified date.</param>
+    /// <returns>List of AuctionDto objects.</returns>
     [HttpGet]
     public async Task<ActionResult<List<AuctionDto>>> GetAllAuctions(string date)
     {
@@ -41,6 +46,11 @@ public class AuctionsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Retrieves a specific auction by ID.
+    /// </summary>
+    /// <param name="id">The ID of the auction to retrieve.</param>
+    /// <returns>AuctionDto object.</returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<AuctionDto>> GetAuctionById(Guid id)
     {
@@ -57,6 +67,11 @@ public class AuctionsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Creates a new auction.
+    /// </summary>
+    /// <param name="createAuctionDto">The data for the new auction.</param>
+    /// <returns>The created AuctionDto object.</returns>
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<AuctionDto>> CreateAuction(CreateAuctionDto createAuctionDto)
@@ -86,6 +101,12 @@ public class AuctionsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Updates an existing auction.
+    /// </summary>
+    /// <param name="id">The ID of the auction to update.</param>
+    /// <param name="updateAuctionDto">The updated data for the auction.</param>
+    /// <returns>HTTP status code indicating the result of the operation.</returns>
     [Authorize]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult> UpdateAuction(Guid id, UpdateAuctionDto updateAuctionDto)
@@ -118,6 +139,11 @@ public class AuctionsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Deletes an existing auction.
+    /// </summary>
+    /// <param name="id">The ID of the auction to delete.</param>
+    /// <returns>HTTP status code indicating the result of the operation.</returns>
     [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> DeleteAuction(Guid id)
