@@ -26,4 +26,3 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
 WORKDIR /app
 COPY --from=build /app/src/out .
 ENTRYPOINT ["dotnet", "AuctionService.dll"]
-

@@ -4,7 +4,6 @@ const baseUrl = process.env.API_URL;
 
 const handleResponse = async (response: Response) => {
     const text = await response.text();
-    // const data = text && JSON.parse(text);
     let data;
     try {
         data = JSON.parse(text);
@@ -23,6 +22,11 @@ const handleResponse = async (response: Response) => {
     return {error};
 };
 
+const handleError = (error: any) => {
+    console.error(error);
+    return { error: error.message || 'An unexpected error occurred' };
+};
+
 const getHeaders = async () => {
     const token = await getTokenWorkaround();
 
@@ -37,45 +41,61 @@ const getHeaders = async () => {
 };
 
 const get = async (url: string) => {
-    const requestOptions = {
-        method: 'GET',
-        headers: await getHeaders(),
-    }
+    try {
+        const requestOptions = {
+            method: 'GET',
+            headers: await getHeaders(),
+        }
 
-    const response = await fetch(baseUrl + url, requestOptions);
-    return await handleResponse(response);
+        const response = await fetch(baseUrl + url, requestOptions);
+        return await handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
 };
 
 const post = async (url: string, body: {}) => {
-    const requestOptions = {
-        method: 'POST',
-        headers: await getHeaders(),
-        body: JSON.stringify(body)
-    }
+    try {
+        const requestOptions = {
+            method: 'POST',
+            headers: await getHeaders(),
+            body: JSON.stringify(body)
+        }
 
-    const response = await fetch(baseUrl + url, requestOptions);
-    return await handleResponse(response);
+        const response = await fetch(baseUrl + url, requestOptions);
+        return await handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
 };
 
 const put = async (url: string, body: {}) => {
-    const requestOptions = {
-        method: 'PUT',
-        headers: await getHeaders(),
-        body: JSON.stringify(body)
-    }
+    try {
+        const requestOptions = {
+            method: 'PUT',
+            headers: await getHeaders(),
+            body: JSON.stringify(body)
+        }
 
-    const response = await fetch(baseUrl + url, requestOptions);
-    return await handleResponse(response);
+        const response = await fetch(baseUrl + url, requestOptions);
+        return await handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
 };
 
 const del = async (url: string) => {
-    const requestOptions = {
-        method: 'DELETE',
-        headers: await getHeaders()
-    }
+    try {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: await getHeaders()
+        }
 
-    const response = await fetch(baseUrl + url, requestOptions);
-    return await handleResponse(response);
+        const response = await fetch(baseUrl + url, requestOptions);
+        return await handleResponse(response);
+    } catch (error) {
+        return handleError(error);
+    }
 };
 
 export const fetchWrapper = {
