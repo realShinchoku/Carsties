@@ -57,6 +57,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.NameClaimType = "username";
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AuctionPolicy", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "auction.read", "auction.write");
+    });
+});
+
 builder.Services.AddGrpc();
 builder.Services.AddScoped<IAuctionRepository, AuctionRepository>();
 
@@ -67,9 +76,9 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireAuthorization("AuctionPolicy");
 
-app.MapGrpcService<GrpcAuctionService>();
+app.MapGrpcService<GrpcAuctionService>().RequireAuthorization("AuctionPolicy");
 
 var retryPolicy = Policy
     .Handle<NpgsqlException>()

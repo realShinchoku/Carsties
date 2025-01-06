@@ -48,15 +48,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.NameClaimType = "username";
     });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("BidPolicy", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("scope", "bid.read", "bid.write");
+    });
+});
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHostedService<CheckAuctionFinished>();
 builder.Services.AddScoped<GrpcAuctionClient>();
 
 var app = builder.Build();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireAuthorization("BidPolicy");
 
 await Policy.Handle<TimeoutException>()
     .WaitAndRetryAsync(5, _ => TimeSpan.FromSeconds(10))

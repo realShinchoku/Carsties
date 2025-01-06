@@ -2,6 +2,11 @@ import {getTokenWorkaround} from "@/app/actions/authActions";
 
 const baseUrl = process.env.API_URL;
 
+/**
+ * Handles the response from an API request.
+ * @param response - The response object from the fetch request.
+ * @returns The parsed response data or an error object.
+ */
 const handleResponse = async (response: Response) => {
     const text = await response.text();
     let data;
@@ -22,11 +27,20 @@ const handleResponse = async (response: Response) => {
     return {error};
 };
 
+/**
+ * Handles errors that occur during an API request.
+ * @param error - The error object.
+ * @returns An object containing the error message.
+ */
 const handleError = (error: any) => {
     console.error(error);
     return { error: error.message || 'An unexpected error occurred' };
 };
 
+/**
+ * Retrieves the headers for an API request, including the authorization token if available.
+ * @returns An object containing the headers.
+ */
 const getHeaders = async () => {
     const token = await getTokenWorkaround();
 
@@ -40,6 +54,11 @@ const getHeaders = async () => {
     return headers;
 };
 
+/**
+ * Sends a GET request to the specified URL.
+ * @param url - The URL to send the request to.
+ * @returns The response data or an error object.
+ */
 const get = async (url: string) => {
     try {
         const requestOptions = {
@@ -54,6 +73,12 @@ const get = async (url: string) => {
     }
 };
 
+/**
+ * Sends a POST request to the specified URL with the provided body.
+ * @param url - The URL to send the request to.
+ * @param body - The body of the request.
+ * @returns The response data or an error object.
+ */
 const post = async (url: string, body: {}) => {
     try {
         const requestOptions = {
@@ -69,6 +94,12 @@ const post = async (url: string, body: {}) => {
     }
 };
 
+/**
+ * Sends a PUT request to the specified URL with the provided body.
+ * @param url - The URL to send the request to.
+ * @param body - The body of the request.
+ * @returns The response data or an error object.
+ */
 const put = async (url: string, body: {}) => {
     try {
         const requestOptions = {
@@ -84,6 +115,11 @@ const put = async (url: string, body: {}) => {
     }
 };
 
+/**
+ * Sends a DELETE request to the specified URL.
+ * @param url - The URL to send the request to.
+ * @returns The response data or an error object.
+ */
 const del = async (url: string) => {
     try {
         const requestOptions = {

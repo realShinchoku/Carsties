@@ -467,3 +467,19 @@ export default function Filters() {
     );
 }
 ```
+
+## Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+# or
+yarn test
+```
+
+This will execute the unit tests for the frontend components using Jest and React Testing Library.
+
+## CI/CD Pipeline
+
+The CI/CD pipeline is set up to run tests and deploy the application. Make sure to configure the pipeline to run the tests before deploying any changes to ensure the code is working as expected.
