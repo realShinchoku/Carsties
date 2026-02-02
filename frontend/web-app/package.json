@@ -12,7 +12,7 @@
     "@microsoft/signalr": "^7.0.12",
     "autoprefixer": "10.4.16",
     "date-fns": "^2.30.0",
-    "eslint": "8.52.0",
+    "eslint": "9.26.0",
     "eslint-config-next": "14.0.0",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.6.4",
